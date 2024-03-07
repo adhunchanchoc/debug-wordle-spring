@@ -38,6 +38,8 @@ public class WordleService {
         return null;
     }
     public CharacterResult[] calculateResult(String word){
+        word = word.toUpperCase(); // included after bugs
+
         CharacterResult[] result = new CharacterResult[WORD.length()];
         for(int i = 0; i< word.length();i++){
             char currentChar = word.charAt(i);
