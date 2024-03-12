@@ -30,7 +30,7 @@
 </head>
 <body>
 
-<p class="error" th:text="${errorMessage}"></p>
+<p class="error" id="error" th:text="${errorMessage}"></p>
 
 <ul>
     <li th:each="entry: ${entries}">
@@ -40,10 +40,23 @@
     </li>
 </ul>
 
-<form action="#" method="post">
-    <p>Message: <input type="text" name="guess"/></p>
+<form action="#" method="post" id="form" th:action="@{/guessMVC}"><!--th:action="@{/guessMVC}"-->
+    <p>Guess: <input type="text" id="guess" name="guess"/></p>
     <p><input type="submit" value="Submit"/></p>
 </form>
+
+<script>
+    const form = document.querySelector('#form');
+    const guessField = document.querySelector('#guess');
+    const message = document.querySelector('#error');
+
+    form.addEventListener('submit', (event) => {
+        if (guessField.value.length !== 5) {
+            message.textContent = 'Guess must be 5 characters';
+            event.preventDefault();
+        }
+    });
+</script>
 
 </body>
 </html>
