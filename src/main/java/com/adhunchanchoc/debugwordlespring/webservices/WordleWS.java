@@ -2,6 +2,7 @@ package com.adhunchanchoc.debugwordlespring.webservices;
 
 import com.adhunchanchoc.debugwordlespring.service.WordleService;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,12 +23,12 @@ public class WordleWS {
     }
 
     @GetMapping("/guess")
-    public Result guess(String word) {
+    public Result guess(@CookieValue(required = false) String userId, String word) {
         var error = wordleService.validate(word);
         if(error != null) {
             return new Result(null,error);
         }
         word = word.toUpperCase();
-        return new Result(wordleService.calculateResult(word),null);
+        return new Result(wordleService.calculateResult(userId,word),null);
     }
 }

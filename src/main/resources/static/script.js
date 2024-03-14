@@ -5,6 +5,36 @@ let currentRow = 0;
 let currentColumn = 0;
 let currentGuess = '';
 
+function getCookie(name) {
+    const cookieName = name+"=";
+    const cookies=document.cookie.split(';');
+    for (let i=0;i<cookies.length;i++) {
+        let cookie = cookies[i].trim();
+        if (cookie.indexOf(cookieName) === 0){
+            return cookie.substring(cookieName.length, cookie.length);
+        }
+    }
+    return "";
+}
+
+function createUserIDCookie() {
+    const userIdCookieName = "userId";
+    let userID = getCookie(userIdCookieName);
+    if (!userID) {
+        userID = uuidv4();
+
+    const date = new Date();
+    // expiration date of a cookie using current time + milliseconds
+    date.setTime(date.getTime() + (10* 365 * 24 * 60 * 60 * 1000));
+    const expires = `expires=${date.toUTCString()}`;
+    // creating cookie string
+    document.cookie = `${userIdCookieName}=${userID};${expires};path=/`;
+    }
+    return userID;
+}
+
+const userID = createUserIDCookie();
+
 function generateBoard() {
     for (let row=0; row< maxAttempts; row++){
         const rowElement = document.createElement("div");

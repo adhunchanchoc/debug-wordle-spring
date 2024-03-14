@@ -1,5 +1,7 @@
 package com.adhunchanchoc.debugwordlespring.service;
 
+import com.adhunchanchoc.debugwordlespring.db.DBEntry;
+import com.adhunchanchoc.debugwordlespring.db.Database;
 import com.adhunchanchoc.debugwordlespring.webservices.CharacterResult;
 import com.adhunchanchoc.debugwordlespring.webservices.Result;
 import org.springframework.core.io.ClassPathResource;
@@ -15,6 +17,7 @@ import java.util.Scanner;
 public class WordleService {
     private static final String WORD = "LYMPH";
     private static final List<String> DICTIONARY = new ArrayList<>();
+    private final Database database;
 
     static {
         try (InputStream is = new ClassPathResource("words.txt").getInputStream()) {
@@ -27,6 +30,10 @@ public class WordleService {
         }
     }
 
+    public WordleService(Database database) { // would not be needed if Lombok have done it
+        this.database = database;
+    }
+
     public String validate(String word){
         if (word.length() != 5) {
             return "Bad length";
@@ -37,8 +44,9 @@ public class WordleService {
         }
         return null;
     }
-    public CharacterResult[] calculateResult(String word){
+    public CharacterResult[] calculateResult(String userId, String word){
         word = word.toUpperCase(); // included after bugs
+        database.insert(new DBEntry(userId, word, WORD, 0)); // attempts incremented in Database insert() method
 
         CharacterResult[] result = new CharacterResult[WORD.length()];
         for(int i = 0; i< word.length();i++){
